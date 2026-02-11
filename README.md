@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src=".github/assets/plantilla.png" alt="My App Logo"/>
+<img src=".github/assets/plantilla.png" alt="My App Logo" width="200"/>
 
 <h1 align="center"><strong>Plantilla base para crear un proyecto con Laravel y React en un entorno  Docker</strong></h1>
 <h2 align="center">Documentación con SwaggerUI</h2>
