@@ -1,5 +1,21 @@
-<h1 align="center"><strong>Plantilla Laravel + React en Docker</strong></h1>
+<div align="center">
+
+<img src=".github/assets/plantilla.png" alt="My App Logo"/>
+
+<h1 align="center"><strong>Plantilla base para crear un proyecto con Laravel y React en un entorno  Docker</strong></h1>
 <h2 align="center">Documentación con SwaggerUI</h2>
+
+[![Laravel](https://img.shields.io/badge/Laravel-12-FF2D20?logo=laravel&logoColor=white)](https://laravel.com)
+[![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)](https://reactjs.org)
+[![PHP](https://img.shields.io/badge/PHP-8.3-777BB4?logo=php&logoColor=white)](https://php.net)
+[![Docker](https://img.shields.io/badge/Docker-Enabled-2496ED?logo=docker&logoColor=white)](https://docker.com)
+[![DDD](https://img.shields.io/badge/Architecture-DDD-green)](https://en.wikipedia.org/wiki/Domain-driven_design)
+[![Hexagonal](https://img.shields.io/badge/Architecture-Hexagonal-blue)](https://en.wikipedia.org/wiki/Hexagonal_architecture_(software))
+[![PHPUnit](https://img.shields.io/badge/Testing-PHPUnit-3776AB?logo=php&logoColor=white)](https://phpunit.de)
+
+</div>
+
+---
 
 <details>
 <summary style="cursor: pointer;" id="index">
@@ -8,7 +24,7 @@
   
 <br>
 
-🎯 [Descripción de la plantilla](#-descripción-de-la-plantilla)
+🎯 [Descripción de la aplicación](#-descripción-de-la-aplicación)
 
 🚀 [Tecnologías utilizadas](#-tecnologías-utilizadas)
 
@@ -22,11 +38,9 @@
 
 🐋 [Docker: instalación y requisitos previos](#-docker-instalación-y-requisitos-previos)
 
-🐧 [Cómo levantar el proyecto en Linux](#-cómo-levantar-el-proyecto-en-linux)
+🛠️ [Cómo levantar el proyecto](#️-cómo-levantar-el-proyecto)
 
-🪟 [Cómo levantar el proyecto en Windows](#-cómo-levantar-el-proyecto-en-windows)
-
-🍎 [Cómo levantar el proyecto en Mac](#-cómo-levantar-el-proyecto-en-mac)
+💾 [Gestión de bases de datos con phpMyAdmin](#-gestión-de-bases-de-datos-con-phpmyadmin)
 
 🧪 [Testing](#-testing)
 
@@ -34,7 +48,7 @@
 
 ---
 
-## 🎯 Descripción de la plantilla
+## 🎯 Descripción de la aplicación
 
 Plantilla base para crear un proyecto con Laravel y React en un entorno Docker.
 
@@ -42,11 +56,12 @@ Plantilla base para crear un proyecto con Laravel y React en un entorno Docker.
 
 ## 🚀 Tecnologías utilizadas
 
-- Backend: **Laravel**
+- Backend: **Laravel 12**
 - Frontend: **React**
 - Entorno de desarrollo: **Docker**
 - Testing: **PHPUnit**
-- Documentación API: **SwaggerUI**
+- Diseño y arquitectura: **DDD** + **Hexagonal**
+- Documentación API: **l5-swagger** (OpenAPI 3.0)
 
 🔝 [Volver al índice](#index)
 
@@ -63,15 +78,20 @@ Plantilla base para crear un proyecto con Laravel y React en un entorno Docker.
 
 ## 🔌 Puertos del proyecto
 
-##### 👉 Backend: Nginx + Laravel (public/) ➡️ [http://localhost:8988](http://localhost:8988)
+| Servicio | Puerto | URL |
+|----------|--------|-----|
+| **Backend** (Nginx + Laravel) | 8988 | [http://localhost:8988](http://localhost:8988) |
+| **Frontend** (React + Vite) | 8989 | [http://localhost:8989](http://localhost:8989) |
+| **phpMyAdmin** | 8080 | [http://localhost:8080](http://localhost:8080) |
+| **MySQL (desarrollo)** | 3700 | `localhost:3700` |
+| **MySQL (tests)** | 3701 | `localhost:3701` |
 
-##### 👉 Frontend: React (Vite dev server) ➡️ [http://localhost:8989](http://localhost:8989)
-
-##### 👉 MySQL de desarrollo: host localhost puerto 3700 (3306 en contenedor)
-
-##### 👉 MySQL de tests: host localhost puerto 3701 (3306 en contenedor)
-
-###### 🔑 Credenciales base de datos por defecto (si usas .env.example) ➡️ usuario: *app* / pass: *app* / base: *app*
+> 📝 **NOTA**
+>
+> **Credenciales de base de datos por defecto:**
+> - Usuario: `app`
+> - Contraseña: `app`
+> - Base de datos: `app`
 
 🔝 [Volver al índice](#index)
 
@@ -79,9 +99,15 @@ Plantilla base para crear un proyecto con Laravel y React en un entorno Docker.
 
 ## 📖 Documentación API
 
-La información sobre los endpoints de la API se genera con SwaggerUI.
+La documentación de la API se genera automáticamente con **l5-swagger** a partir de anotaciones PHP.
 
-##### 👉 SwaggerUI ➡️ [http://localhost:8081](http://localhost:8081) 
+**👉 Swagger UI:** [http://localhost:8988/api/documentation](http://localhost:8988/api/documentation)
+
+> 📘 **Guía completa de documentación**
+>
+> Para aprender cómo documentar nuevos endpoints, regenerar la documentación y más detalles, consulta:
+>
+> **[SWAGGER.md](SWAGGER.md)**
 
 🔝 [Volver al índice](#index)
 
@@ -89,23 +115,23 @@ La información sobre los endpoints de la API se genera con SwaggerUI.
 
 ## 🧩 Servicios principales (Docker)
 
-Este proyecto incluye un entorno Docker completo con **8 servicios**:
+Este proyecto incluye un entorno Docker completo con **7 servicios**:
 
-📌 **Nginx** – Servidor web que expone la aplicación **Laravel** al puerto **8988**. Recibe las peticiones HTTP y las pasa a PHP-FPM para procesar la lógica de Laravel.
+| Servicio | Descripción | Puerto |
+|----------|-------------|--------|
+| **Nginx** | Servidor web que expone Laravel | 8988 |
+| **PHP-FPM 8.3** | Motor PHP que ejecuta el código de Laravel | - |
+| **Laravel** | Contenedor utilitario para dependencias, migraciones y colas | - |
+| **MySQL (desarrollo)** | Base de datos principal | 3700 |
+| **MySQL (tests)** | Base de datos para pruebas automáticas | 3701 |
+| **phpMyAdmin** | Interfaz web para gestionar las bases de datos MySQL | 8080 |
+| **React (Vite)** | Interfaz frontend con servidor de desarrollo | 8989 |
 
-📌 **PHP-FPM 8.2** – Motor PHP que ejecuta el código de Laravel dentro del contenedor PHP. No expone puertos, solo procesa peticiones enviadas por Nginx.  
-
-📌 **Laravel** – Contenedor utilitario encargado de instalar dependencias, generar la clave de aplicación, ejecutar migraciones y procesar colas. No expone puertos.  
-
-📌 **MySQL (desarrollo)** – Base de datos principal para la aplicación. Puerto interno **3306**, expuesto en el host como **3700**.
-
-📌 **MySQL (tests)** – Base de datos separada para pruebas automáticas. Puerto interno **3306**, expuesto en el host como **3701**.
-
-📌 **React (Vite)** – Interfaz frontend de la aplicación. Incluye su propio servidor de desarrollo y expone el puerto **8989**. No depende de Nginx. 
-
-📌 **Swagger Builder (Redocly)** – Contenedor utilitario que compila la documentación OpenAPI a partir de los archivos fuente YAML en `docs/`. No expone puertos.  
-
-📌 **Swagger UI** – Servidor web que sirve la documentación generada. Escucha en su propio puerto interno y lo mapea al host como 8081.
+> 📝 **NOTA**
+>
+> **Nginx** recibe las peticiones HTTP y las pasa a **PHP-FPM** para procesar la lógica de Laravel.
+>
+> **React** incluye su propio servidor de desarrollo y no depende de Nginx.
 
 🔝 [Volver al índice](#index)
 
@@ -113,77 +139,66 @@ Este proyecto incluye un entorno Docker completo con **8 servicios**:
 
 ## 🐋 Docker: instalación y requisitos previos
 
-Para ejecutar el proyecto necesitarás utilizar **Docker**.
-  
-A continuación se detallan las diferencias según tu sistema operativo.
+Para ejecutar el proyecto necesitarás **Docker** instalado en tu sistema.
 
-### 🐧 Ubuntu/Debian (ejemplo para Ubuntu 22.04+)
+A continuación se detallan las instrucciones según tu sistema operativo.
 
-##### 1) Desinstalar versiones antiguas (opcional)
+### 🐧 Linux (Ubuntu/Debian)
 
-🔹 Eimina instalaciones previas de Docker para evitar conflictos.
+> 💡 **CONSEJO**
+>
+> Estas instrucciones son para Ubuntu 22.04+ y Debian. Para otras distribuciones, consulta la [documentación oficial de Docker](https://docs.docker.com/engine/install/).
 
-``` bash
+#### 1. Desinstalar versiones antiguas (opcional)
+
+Elimina instalaciones previas de Docker para evitar conflictos:
+
+```bash
 sudo apt-get remove -y docker docker-engine docker.io containerd runc || true
 ```
 
-##### 2) Preparar paquetes previos
+#### 2. Preparar paquetes previos
 
-🔹 Actualiza repositorios e instala utilidades necesarias para añadir repositorios seguros.
+Actualiza repositorios e instala utilidades necesarias:
 
-``` bash
+```bash
 sudo apt-get update
 sudo apt-get install -y ca-certificates curl gnupg lsb-release
 ```
 
-##### 3) Crear directorio de claves APT
+#### 3. Descargar la clave GPG oficial de Docker
 
-🔹 Crea la carpeta recomendada por Debian/Ubuntu para almacenar claves GPG de  repositorios.
-
-``` bash
+```bash
 sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 ```
 
-##### 4) Descargar la clave GPG oficial de Docker
+#### 4. Registrar el repositorio oficial de Docker
 
-🔹 Permite verificar la autenticidad de los paquetes del repositorio de Docker.
-
-``` bash
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg   | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+```bash
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 ```
 
-##### 5) Registrar el repositorio oficial de Docker en APT
+#### 5. Instalar Docker Engine + plugins
 
-🔹 Añade la fuente oficial de Docker para instalar versiones actualizadas.
-
-``` bash
-echo   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg]   https://download.docker.com/linux/ubuntu   $(. /etc/os-release && echo $UBUNTU_CODENAME) stable"   | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-```
-##### 6) Instalar Docker Engine + plugins
-
-🔹 Instala el motor de Docker, CLI, containerd, Buildx y Compose plugin.
-
-``` bash
+```bash
 sudo apt-get update
-sudo apt-get install -y docker-ce docker-ce-cli containerd.io   docker-buildx-plugin docker-compose-plugin
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 ```
 
-##### 7) Recomendado: Usar Docker sin sudo
+#### 6. Usar Docker sin sudo (recomendado)
 
-🔹 Permite ejecutar comandos Docker sin necesidad de sudo.
-
-``` bash
+```bash
 sudo usermod -aG docker $USER
 ```
 
-⚠️ Cierra sesión y vuelve a entrar para aplicar los cambios.
+> ⚠️ **IMPORTANTE**
+>
+> Cierra sesión y vuelve a entrar para aplicar los cambios.
 
+#### 7. Verificar instalación
 
-##### 8) Verificar instalación
-
-🔹 Comprueba que Docker y Compose funcionan correctamente.
-
-``` bash
+```bash
 docker --version
 docker compose version
 docker run --rm hello-world
@@ -192,394 +207,147 @@ docker run --rm hello-world
 🔝 [Volver al índice](#index)
 
 ### 🪟 Windows 10/11
-##### 1) Asegurate de tener la virtualización activada en BIOS/UEFI.
-##### 2) Instala Docker Desktop para Windows desde el sitio oficial.
-##### 3) Habilita WSL 2 si Docker Desktop lo solicita.
-##### 4) Reinicia y verifica:
-🔹 Abre la consola (PowerShell, CMD o Ubuntu/WSL2 si la tienes) y ejecuta:
 
-``` bash
+> 💡 **CONSEJO**
+>
+> Docker en Windows requiere WSL2. Asegúrate de tener la virtualización activada en BIOS/UEFI.
+
+#### 1. Instalar Docker Desktop
+
+Descarga e instala [Docker Desktop para Windows](https://www.docker.com/products/docker-desktop/) desde el sitio oficial.
+
+#### 2. Habilitar WSL 2
+
+Si Docker Desktop lo solicita, habilita WSL 2 siguiendo las instrucciones en pantalla.
+
+#### 3. Reiniciar y verificar
+
+Abre PowerShell, CMD o Ubuntu/WSL2 y ejecuta:
+
+```bash
 docker --version
 docker compose version
 ```
 
-##### 5) Inicia la aplicación Docker Desktop y déjala corriendo en segundo plano (no la necesitas para nada más, aunque puedes utilizar sus funciones, que pueden ser interesantes)
-##### 6) En la consola (Ubuntu/WSL2 si la tienes, o CMD o PowerShell) ya podrás ejecutar todos los comandos habituales de Docker.
+#### 4. Iniciar Docker Desktop
+
+Inicia la aplicación Docker Desktop y déjala corriendo en segundo plano.
+
+Ya puedes ejecutar todos los comandos habituales de Docker desde la consola.
 
 🔝 [Volver al índice](#index)
-<br>
 
 ### 🍎 macOS (Intel / Apple Silicon)
 
-##### 1) Comprueba compatibilidad del procesador.
-Docker Desktop funciona tanto en Apple Silicon (M1/M2/M3) como en Intel, pero usa tecnologías distintas internamente (HyperKit vs Apple Virtualization Framework).
-No tienes que configurar nada, solo asegurarte de que tu versión de macOS es compatible (macOS 12+ normalmente).
+> 💡 **CONSEJO**
+>
+> Docker Desktop funciona tanto en Apple Silicon (M1/M2/M3) como en Intel.
 
-##### 2) Instala Docker Desktop para macOS desde el sitio oficial.
-Descarga la versión correspondiente a tu chip y arrastra el icono a *Aplicaciones*.
+#### 1. Instalar Docker Desktop
 
-##### 3) Autoriza Docker Desktop si macOS te lo solicita.
-macOS puede mostrar un aviso para permitir extensiones o controladores del sistema.
+Descarga [Docker Desktop para macOS](https://www.docker.com/products/docker-desktop/) desde el sitio oficial.
+
+Descarga la versión correspondiente a tu chip (Intel o Apple Silicon) y arrastra el icono a *Aplicaciones*.
+
+#### 2. Autorizar Docker Desktop
+
+macOS puede mostrar un aviso para permitir extensiones del sistema.
+
 Ve a: *Preferencias del Sistema → Seguridad y privacidad* y permite las extensiones si aparece el aviso.
 
-##### 4)  Inicia Docker Desktop y espera a que esté "*Running*".
-Igual que en Windows: una vez está ejecutándose, ya no necesitas abrir la app salvo que quieras gestionar contenedores visualmente.
+#### 3. Iniciar Docker Desktop
 
-##### 5)  Verifica la instalación desde Terminal:
+Inicia Docker Desktop y espera a que esté "*Running*".
 
-``` bash
+#### 4. Verificar instalación
+
+Abre Terminal y ejecuta:
+
+```bash
 docker --version
 docker compose version
 ```
 
-##### 6)  Usa Docker normalmente desde Terminal.
-No hay diferencias relevantes frente a Linux/WSL: puedes ejecutar *docker*, *docker compose*, etc.
+#### 5. Ajustar recursos (opcional)
 
-##### 7) Opcional: justa recursos asignados a Docker Desktop.
+Puedes ajustar CPU, memoria RAM y disco asignados a Docker desde:
 
-CPU, memoria RAM, disco usados para las máquinas virtuales.
-Se controla desde: *Docker Desktop → Settings → Resources*
-
-##### 8) Opcional: habilita Docker Buildx y otras extensiones.
-Docker Desktop en macOS lo trae activado por defecto, pero puedes ajustarlo en:
-*Settings → Features in development / Extensions*
-
-🔝 [Volver al índice](#index)
-<br>
-
----
-
-## 🐧 Cómo levantar la plantilla/proyecto en Linux
-
->###### 🚨 IMPORTANTE:
->- En el archivo `docker-compose.yml`, sustituye "my_app" por el nombre de tu aplicación.
->- En el archivo `openapi.source.yml`, sustituye "my_app" por el nombre de tu aplicación.
->- En la ejecución de los comandos que verás en estas instrucciones, sustituye `my_app` por el nombre de tu aplicación.
-
->###### 🗒️ NOTA PREVIA SOBRE DOCKER EN LINUX:
->- Docker es nativo en Linux, por lo que no necesita Docker Desktop.
->- En Linux el Docker Engine se ejecuta directamente sobre el kernel, sin capas intermedias ni virtualización.
->- Por eso no necesita Docker Desktop, ya que el motor corre directamente en el sistema.
->- En Linux no se necesita WSL2, porque WSL2 es solo para Windows y Linux ya ejecuta contenedores de forma real y nativa.
-
->###### 💡 RECOMENDADO:
->- Permitir usar docker sin sudo: `sudo usermod -aG docker $USER` (Es a nivel global, para cualquier proyecto).
-
-#### PASO A PASO DE INSTALACIÓN
-
-##### 1. CLONAR REPOSITORIO:
-
-En la terminal, ejecuta:
-
-```
-git clone https://github.com/toniGitH/Echo.git
-```
-
-O si prefieres crearlo en una carpeta con el nombre que tú prefieras, como *MiProyecto*:
-
-```
-git clone https://github.com/toniGitH/Echo.git MiProyecto
-```
-
-Si no lo puedes clonar, puedes hacer un Fork o, directamente, descargarlo.
-
-##### 2. REASIGNAR LA PROPIEDAD DE LOS ARCHIVOS:
-
-Nada más clonar el proyecto, sin levantar aún los contenedores:
-
-```
-cd /home/TU_USUARIO/Proyectos/CARPETA_RAÍZ_DE_TU_PROYECTO
-sudo chown -R $USER:$USER ./laravel
-```
-
-Esto asegura que todos los archivos son tuyos, no del root del contenedor anterior.
-
-Este paso SIEMPRE antes de levantar Docker por primera vez.
-
-##### 3. CREAR ARCHIVO .ENV DE LA CARPETA LARAVEL
-
-Dentro de la carpeta `laravel` del proyecto, crea un archivo `.env`:
-
-```
-cp laravel/.env.example laravel/.env
-```
-
-Asegúrate de que, al menos, exista esto en tu archivo `.env`:
-
-```
-APP_KEY=
-APP_URL=http://localhost:8988
-```
-
-**NO ES NECESARIO** tener estas variables definidas en tu archivo `.env`:
-
-```
-APP_ENV: local
-APP_DEBUG: true
-DB_CONNECTION: mysql
-DB_HOST: mysql
-DB_PORT: 3306
-DB_DATABASE: app
-DB_USERNAME: app
-DB_PASSWORD: app
-```
-
-De hecho, es totalmente inútil y nunca van a ser leídas, porque según la configuración actual del proyecto, sus valores son establecidos en el archivo `docker-compose.yml` y dicho archivo tiene prioridad sobre el archivo `.env`.
-
-##### 4. LEVANTAR LA PILA (construye imágenes si es la primera vez)
-
-Asegúrate de que tienes Docker en ejecución en tu sistema.
-
-En una terminal, ejecuta:
-
-```
-docker compose up -d --build
-```
-
-##### 5. DAR PERMISOS A LAS CARPETAS QUE LARAVEL NECESITA ESCRIBIR:
-
-Teclear, en la raíz del proyecto, y cuando estén levantados todos los contenedores, esto:
-
-```
-docker exec my_app-php sh -lc 'cd /var/www/html && chown -R www-data:www-data storage bootstrap/cache && chmod -R ug+rwX storage bootstrap/cache'
-```
-
-Este comando deja `storage/` y `bootstrap/cache/` listos para que Laravel pueda escribir desde el contenedor sin errores de permisos.
-
-##### 6. OPCIONAL
-
-Si en algún momento ves que un archivo vuelve a ser de root, ejecuta esto desde tu máquina, sin parar los contenedores:
-
-```
-sudo chown -R $USER:$USER ./laravel
-```
-
-Esto restablece los permisos de todo el proyecto por si algún comando dentro del contenedor (como `php artisan make:model`) creó archivos
+*Docker Desktop → Settings → Resources*
 
 🔝 [Volver al índice](#index)
 
 ---
 
-## 🪟 Cómo levantar la plantilla/proyecto en Windows 10/11
+## 🛠️ Cómo levantar el proyecto
 
->###### 🚨 IMPORTANTE:
->- En el archivo `docker-compose.yml`, sustituye "my_app" por el nombre de tu aplicación.
->- En el archivo `openapi.source.yml`, sustituye "my_app" por el nombre de tu aplicación.
->- En la ejecución de los comandos de estas instrucciones, sustituye `my_app` por el nombre de tu aplicación.
+Para instrucciones detalladas sobre cómo configurar y levantar el proyecto en **Linux**, **macOS** o **Windows**, consulta el archivo:
 
->###### 🗒️ NOTA PREVIA SOBRE DOCKER EN WINDOWS:
->- Windows no puede ejecutar Docker de forma nativa, por lo que Docker Desktop es obligatorio tenerlo instalado y en ejecución.
->- Docker Engine no puede ejecutarse directamente sobre Windows.
->- En Windows, Docker funciona gracias a WSL2, donde se ejecuta realmente el Docker Engine.
->- Docker Desktop crea un entorno Linux dentro de WSL2, y es ahí donde se ejecuta realmente Docker Engine.
->- Sin Docker Desktop + WSL2, ningún comando `docker` o `docker compose` funcionará.
->- Todos los comandos Docker funcionan mientras Docker Desktop esté activo.
+**📄 [SETUP.md](SETUP.md)**
 
->###### 🔒 AJUSTES DE PERMISOS:
->- En Windows NO existe un equivalente al comando `sudo usermod -aG docker $USER`.
->- Por tanto: no es necesario realizar ningún ajuste de permisos para usar docker sin sudo.
-
-#### PASO A PASO DE INSTALACIÓN
-
-##### 1. CLONAR REPOSITORIO
-
-En PowerShell, CMD o Git Bash:
-```
-git clone https://github.com/toniGitH/Echo.git
-```
-
-O si prefieres crearlo en una carpeta con el nombre que tú prefieras, como *MiProyecto*:
-
-```
-git clone https://github.com/toniGitH/Echo.git MiProyecto
-```
-
-Si no puedes clonarlo, puedes hacer un Fork o descargar el ZIP del repositorio.
-
-##### 2. REASIGNAR LA PROPIEDAD DE LOS ARCHIVOS
-
-En Windows **NO es necesario este paso**.
-
-El comando:
-
-```
-sudo chown -R $USER:$USER ./laravel
-```
-no existe en Windows y no es necesario, ya que Windows no gestiona permisos como Linux.
-
-##### 3. CREAR ARCHIVO .ENV DE LA CARPETA LARAVEL
-
-Dentro de la carpeta `laravel` del proyecto, crea un archivo `.env`:
-
-```
-cp laravel/.env.example laravel/.env
-```
-
-Asegúrate de que, al menos, exista esto en tu archivo `.env`:
-
-```
-APP_KEY=
-APP_URL=http://localhost:8988
-```
-
-**NO ES NECESARIO** tener estas variables definidas en tu archivo `.env`:
-
-```
-APP_ENV: local
-APP_DEBUG: true
-DB_CONNECTION: mysql
-DB_HOST: mysql
-DB_PORT: 3306
-DB_DATABASE: app
-DB_USERNAME: app
-DB_PASSWORD: app
-```
-
-De hecho, es totalmente inútil y nunca van a ser leídas, porque según la configuración actual del proyecto, sus valores son establecidos en el archivo `docker-compose.yml` y dicho archivo tiene prioridad sobre el archivo `.env`.
-
-##### 4. LEVANTAR LA PILA (construye imágenes si es la primera vez)
-
-Asegúrate de tener iniciada y en ejecución la aplicación Docker Desktop.
-
-En PowerShell, Git Bash o CMD:
-
-```
-docker compose up -d --build
-```
-
-Docker Desktop gestionará las imágenes y contenedores.
-
-##### 5. DAR PERMISOS A LAS CARPETAS QUE LARAVEL NECESITA
-
-En Windows, aunque el sistema de archivos del host no usa permisos UNIX, dentro del contenedor sí es necesario ejecutar el mismo comando que en Linux:
-
-```
-docker exec my_app-php sh -lc 'cd /var/www/html && chown -R www-data:www-data storage bootstrap/cache && chmod -R ug+rwX storage bootstrap/cache'
-```
-
-Esto prepara `storage/` y `bootstrap/cache/` para que Laravel pueda escribir.
-
-##### 6. OPCIONAL
-
-En Windows este comando no existe y no debe ejecutarse:
-
-```
-sudo chown -R $USER:$USER ./laravel
-```
-
-Este paso se aplica únicamente en Linux y macOS.
+El archivo SETUP.md contiene:
+- Instrucciones paso a paso para cada sistema operativo
+- Configuración de permisos (Linux)
+- Solución de problemas comunes
+- Comandos útiles para el desarrollo diario
 
 🔝 [Volver al índice](#index)
 
 ---
 
-## 🍎 Cómo levantar la plantilla/proyecto en Mac
+## 💾 Gestión de bases de datos con phpMyAdmin
 
->###### 🚨 IMPORTANTE:
->- En el archivo `docker-compose.yml`, sustituye "my_app" por el nombre de tu aplicación.
->- En el archivo `openapi.source.yml`, sustituye "my_app" por el nombre de tu aplicación.
->- En la ejecución de los comandos de estas instrucciones, sustituye `my_app` por el nombre de tu aplicación.
+phpMyAdmin es una interfaz web que te permite gestionar las bases de datos MySQL de forma visual y sencilla.
 
->###### 🗒️ NOTA PREVIA SOBRE DOCKER EN MAC:
->- macOS no puede ejecutar Docker de forma nativa, por lo que Docker Desktop es obligatorio tenerlo instalado y en ejecución.
->- Docker Engine no puede ejecutarse directamente sobre macOS.
->- Docker Desktop utiliza una máquina virtual interna (HyperKit / Apple HVF / Lima) donde se ejecuta Docker Engine.
->- Todos los comandos Docker funcionan mientras Docker Desktop esté activo.
+### 🌐 Acceso
 
->###### 🔒 AJUSTES DE PERMISOS:
->- No es necesario ningún "docker sin sudo", ya que macOS no necesita ese ajuste.
->- macOS funciona como Linux a nivel de permisos, por lo que `chown` SÍ es necesario.
+Una vez que los contenedores estén levantados, accede a phpMyAdmin en:
 
----
+**👉 URL:** [http://localhost:8080](http://localhost:8080)
 
-#### PASO A PASO DE INSTALACIÓN
+### 🔑 Credenciales
 
-##### 1. CLONAR REPOSITORIO
+Para acceder a las bases de datos, usa las siguientes credenciales:
 
-En Terminal, ejecuta:
+| Campo | Valor |
+|-------|-------|
+| **Servidor** | `mysql` (desarrollo) o `mysql_test` (tests) |
+| **Usuario** | `root` |
+| **Contraseña** | `root` |
 
-```
-git clone https://github.com/toniGitH/Echo.git
-```
+> 💡 **CONSEJO**
+>
+> En la pantalla de login de phpMyAdmin, encontrarás un dropdown para seleccionar el servidor.
+>
+> - Selecciona **`mysql`** para acceder a la base de datos de desarrollo
+> - Selecciona **`mysql_test`** para acceder a la base de datos de tests
 
-O si prefieres crearlo en una carpeta con el nombre que tú prefieras, como *MiProyecto*:
+### 💾 Bases de datos disponibles
 
-```
-git clone https://github.com/toniGitH/Echo.git MiProyecto
-```
+Una vez dentro de phpMyAdmin, encontrarás las siguientes bases de datos:
 
-Si no lo puedes clonar, puedes hacer un Fork o, directamente, descargarlo.
+| Base de datos | Descripción | Servidor |
+|---------------|-------------|----------|
+| `app` | Base de datos principal de desarrollo | `mysql` |
+| `app_testing` | Base de datos para pruebas automáticas | `mysql_test` |
 
-##### 2. REASIGNAR LA PROPIEDAD DE LOS ARCHIVOS
+### 📋 Funcionalidades disponibles
 
-Justo después de clonar, y antes de levantar contenedores:
+Con phpMyAdmin puedes:
 
-```
-cd /Users/TU_USUARIO/Proyectos/CARPETA_RAIZ_DE_TU_PROYECTO
-sudo chown -R $USER:$USER ./laravel
-```
+- ✅ Explorar tablas y ver datos
+- ✅ Ejecutar consultas SQL personalizadas
+- ✅ Crear, modificar y eliminar tablas
+- ✅ Importar y exportar bases de datos
+- ✅ Gestionar usuarios y permisos
+- ✅ Ver la estructura de las tablas
+- ✅ Ejecutar operaciones de mantenimiento
 
-Este paso sí es necesario, igual que en Linux, para evitar que archivos heredados del contenedor queden como root.
-
-Este paso SIEMPRE antes de levantar Docker por primera vez.
-
-##### 3. CREAR ARCHIVO .ENV DE LA CARPETA LARAVEL
-
-Dentro de la carpeta `laravel` del proyecto, crea un archivo `.env`:
-
-```
-cp laravel/.env.example laravel/.env
-```
-
-Asegúrate de que, al menos, exista esto en tu archivo `.env`:
-
-```
-APP_KEY=
-APP_URL=http://localhost:8988
-```
-
-**NO ES NECESARIO** tener estas variables definidas en tu archivo `.env`:
-
-```
-APP_ENV: local
-APP_DEBUG: true
-DB_CONNECTION: mysql
-DB_HOST: mysql
-DB_PORT: 3306
-DB_DATABASE: app
-DB_USERNAME: app
-DB_PASSWORD: app
-```
-
-De hecho, es totalmente inútil y nunca van a ser leídas, porque según la configuración actual del proyecto, sus valores son establecidos en el archivo `docker-compose.yml` y dicho archivo tiene prioridad sobre el archivo `.env`.
-
-##### 4. LEVANTAR LA PILA (construye imágenes si es la primera vez)
-
-Asegúrate de tener iniciada y en ejecución la aplicación Docker Desktop.
-
-En Terminal, ejecuta:
-
-```
-docker compose up -d --build
-```
-
-##### 5. DAR PERMISOS A LAS CARPETAS QUE LARAVEL NECESITA
-
-Igual que Linux:
-
-```
-docker exec my_app-php sh -lc 'cd /var/www/html && chown -R www-data:www-data storage bootstrap/cache && chmod -R ug+rwX storage bootstrap/cache'
-```
-
-##### 6. OPCIONAL
-
-Si alguna vez se generan archivos como root dentro del host:
-
-```
-sudo chown -R $USER:$USER ./laravel
-```
-
-Esto solo es necesario en macOS y Linux.
+> ⚠️ **IMPORTANTE**
+>
+> **Cuidado con las operaciones destructivas:**
+>
+> - Evita eliminar tablas en la base de datos de desarrollo (`app`) si contiene datos importantes
+> - La base de datos de tests (`app_testing`) se limpia automáticamente en cada ejecución de tests
 
 🔝 [Volver al índice](#index)
 
@@ -589,54 +357,78 @@ Esto solo es necesario en macOS y Linux.
 
 ### Información previa
 
-#### Cuando vayas a crear los tests, ten en cuenta la siguiente información.
-
-> ##### 🐋 Contenedor de ejecución
-> ✅ Ejecuta los tests desde el **contenedor de PHP** y no desde el contenedor de Laravel.
+> 📝 **NOTA**
 >
-> ✅ El contenedor PHP es un contenedor "limpio" que no setea ninguna variable de entorno en el archivo `docker-compose.yml`, por lo que podrás establecer los valores deseados dentro del archivo `phpunit.xml`, y éstos serán los que se aplicarán realmente para el testing.
+> **Tipos de tests:**
+> - **Unitarios:** Para elementos del dominio (entidades, value objects, casos de uso, etc.)
+> - **Integración:** Para probar la interacción entre componentes
+> - **Feature:** Para probar endpoints completos
 >
-> ❎ El contenedor Laravel está seteando en el archivo `docker-compose.yml` determinadas variables como la base de datos, por lo que si ejecutas los tests desde este contenedor, esos valores tendrán preferencia sobre los que establezcas en el archivo `phpunit.xml` y éstos últimos nunca serán utilizados.
+> Los tests unitarios utilizan `PHPUnit\Framework\TestCase` de **PHPUnit**.
+>
+> Los tests de integración y feature utilizan `Tests\TestCase` de **Laravel**.
 
-> ##### 💾 Base de datos de testing
+> ⚠️ **IMPORTANTE**
+>
+> **Contenedor de ejecución:**
+>
+> ✅ Ejecuta los tests desde el **contenedor de PHP** (`my_app-php`), no desde el contenedor de Laravel.
+>
+> ✅ El contenedor PHP no setea variables de entorno en `docker-compose.yml`, por lo que los valores de `phpunit.xml` se aplicarán correctamente.
+>
+> ❌ El contenedor Laravel setea variables en `docker-compose.yml` que tienen prioridad sobre `phpunit.xml`, lo que puede causar que los tests usen la base de datos incorrecta.
+
+> 💡 **CONSEJO**
+>
+> **Base de datos de testing:**
+>
 > - El proyecto monta dos bases de datos independientes: una para **desarrollo** y otra para **tests**.
-> - Puedes elegir, a la hora de lanzar los tests, qué base de datos utilizar: **SQLite** en memoria o **MySQL**
-> - En el archivo `phpunit.xml` tienes las dos configuraciones a elegir para establecer si los tests se ejecutarán en una u otra base de datos.
-> - Algunos métodos de tests se omiten automáticamente si la base de datos es SQLite, puesto que están pensados para una base de datos case-insensitive como MySQL. Es decir, se omiten porque en SQLite fallarían, pero en MySQL deben pasar correctamente.
+> - Puedes elegir qué base de datos utilizar: **SQLite** en memoria o **MySQL**.
+> - En `phpunit.xml` tienes las dos configuraciones disponibles.
+> - Algunos tests se omiten automáticamente en SQLite porque están diseñados para MySQL (case-insensitive).
 
 ### Cómo ejecutar los tests
 
-#### 1) Elige el entorno de testing (SQLite o MySQL)
+#### 1. Elige el entorno de testing (SQLite o MySQL)
 
 Abre el archivo `phpunit.xml` y:
-- mantén descomentado el bloque que corresponda a la configuración que quieras usar
-- comenta el bloque que corresponda a la otra configuración
+- Mantén descomentado el bloque que corresponda a la configuración que quieras usar
+- Comenta el bloque de la otra configuración
 
-#### 1) Levanta contenedores
+#### 2. Levanta los contenedores
 
-```
+```bash
 docker compose up -d
 ```
 
-#### 2) Entra dentro del contenedor PHP
+#### 3. Entra dentro del contenedor PHP
 
-```
+```bash
 docker compose exec php bash
 ```
-#### 3) DENTRO del contenedor PHP, ejecuta los tests que necesites
 
-Para ejecutar todos los tests:
-```
+#### 4. Dentro del contenedor PHP, ejecuta los tests
+
+**Ejecutar todos los tests:**
+```bash
 php artisan test
 ```
-Para ejecutar los tests unitarios:
-```
+
+**Ejecutar solo tests unitarios:**
+```bash
 php artisan test --testsuite=unit
 ```
-Etc...
 
+**Ejecutar solo tests de integración:**
+```bash
+php artisan test --testsuite=integration
+```
+
+**Ejecutar solo tests de feature:**
+```bash
+php artisan test --testsuite=feature
+```
 
 🔝 [Volver al índice](#index)
 
 ---
-
