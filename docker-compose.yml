@@ -94,7 +94,27 @@ services:
       sh -lc "composer install || true;
       php artisan key:generate --force || true;
       php artisan migrate --force || true;
+      php artisan l5-swagger:generate || true;
       php artisan queue:work --tries=3 --sleep=3"
+
+  # Contenedor phpMyAdmin para gestionar las bases de datos
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: my_app-phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOSTS: mysql,mysql_test
+      PMA_PORTS: 3306,3306
+      PMA_USER: root
+      PMA_PASSWORD: root
+      PMA_ARBITRARY: 1
+    depends_on:
+      mysql:
+        condition: service_healthy
+      mysql_test:
+        condition: service_healthy
 
   # Contenedor react
   react:
@@ -110,34 +130,6 @@ services:
     volumes:
       - ./react:/app
     command: sh -lc "npm install && npm run dev -- --host"
-
-  # Contenedor de compilación de la documentación Swagger (redocly)
-  swagger-builder:
-    image: node:18-alpine
-    container_name: my_app-swagger-builder
-    working_dir: /docs
-    volumes:
-      - ./docs:/docs
-    command: >
-      sh -c "npm install -g @redocly/cli &&
-             redocly bundle /docs/openapi.source.yml --output /docs/openapi.yml &&
-             echo '✅ Documentación Swagger compilada' &&
-             tail -f /dev/null"
-    restart: unless-stopped
-
-  # Contenedor de SwaggerUI
-  swagger-ui:
-    image: swaggerapi/swagger-ui:latest
-    container_name: my_app-swagger
-    restart: unless-stopped
-    ports:
-      - "8081:8080"
-    volumes:
-      - ./docs:/usr/share/nginx/html/docs:ro
-    environment:
-      SWAGGER_JSON: /usr/share/nginx/html/docs/openapi.yml
-    depends_on:
-      - swagger-builder
 
 # Volúmenes persistentes para las bases de datos
 volumes:
